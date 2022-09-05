@@ -1,49 +1,43 @@
+using FA22.P03.Web;
 using FA22.P03.Web.Features.Products;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
+
+
+app.MapControllers();
 // Configure the HTTP request pipeline.
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var currentId = 1;
-var products = new List<ProductDto>
-{
-    new ProductDto
-    {
-        Id = currentId++,
-        Name = "Super Mario World",
-        Description = "Super Nintendo (SNES) System. Mint Condition",
-        Price = 259.99m,
-    },
-    new ProductDto
-    {
-        Id = currentId++,
-        Name = "Donkey Kong 64",
-        Description = "Moderate Condition Donkey Kong 64 cartridge for the Nintendo 64",
-        Price = 199m,
-    },
-    new ProductDto
-    {
-        Id = currentId++,
-        Name = "Half-Life 2: Collector's Edition",
-        Description = "Good condition with all 5 CDs, booklets, and material from original",
-        Price = 559.99m
-    }
-};
-
+/*
 app.MapGet("/api/products", () =>
     {
         return products;
@@ -123,7 +117,7 @@ app.MapDelete("/api/products/{id}", (int id) =>
     .Produces(400)
     .Produces(404)
     .Produces(200, typeof(ProductDto));
-
+*/
 
 app.Run();
 
