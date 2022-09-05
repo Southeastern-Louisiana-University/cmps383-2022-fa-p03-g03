@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FA22.P03.Web.Features.Products;
+using FA22.P03.Web.Features.Entities.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 
 namespace FA22.P03.Web
