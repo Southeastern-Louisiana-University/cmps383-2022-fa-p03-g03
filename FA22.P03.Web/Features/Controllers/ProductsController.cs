@@ -40,5 +40,20 @@ namespace FA22.P03.Web.Features.Controllers
             return products.ToArray();
 
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<ProductDto> GetProductById(int id)
+            {
+            var result = products.FirstOrDefault(x => x.Id == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+        
+        
+        
     }
 }
