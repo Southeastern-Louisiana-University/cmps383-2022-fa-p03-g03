@@ -13,5 +13,6 @@ namespace FA22.P03.Web.Features.Entities.Listings
 
         public DateTimeOffset EndUtc { get; set; }
 
+
     }
 }
