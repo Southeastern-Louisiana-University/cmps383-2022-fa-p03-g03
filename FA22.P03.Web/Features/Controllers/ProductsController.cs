@@ -1,4 +1,5 @@
-﻿using FA22.P03.Web.Features.Entities.Listings;
+﻿using FA22.P03.Web.Features.Entities.Entities.Products;
+using FA22.P03.Web.Features.Entities.Listings;
 using FA22.P03.Web.Features.Products;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,70 @@ namespace FA22.P03.Web.Features.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly DataContext _dataContext;
+
+        public ProductsController(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+        [HttpGet]
+        public ActionResult GetAllProducts()
+        {
+            var products = _dataContext.Products;
+
+            return Ok(products);
+        }
+        [HttpGet("{id:int}")]
+        public ActionResult<ProductDto> GetProductById(int id)
+        {
+            var result = _dataContext.Products.FirstOrDefault(x => x.Id == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+        [HttpPost("/api/products")]
+        public ActionResult<ProductDto> CreateProduct(ProductDto product)
+        {
+            var productToCreate = new Product()
+            {
+                Name = product.Name,
+                Description = product.Description,
+   
+
+            };
+
+            if (string.IsNullOrWhiteSpace(productToCreate.Name) ||
+           productToCreate.Name.Length > 120 ||
+           string.IsNullOrWhiteSpace(productToCreate.Description))
+            {
+                return BadRequest();
+            }
+            _dataContext.Products.Add(productToCreate);
+            _dataContext.SaveChanges();
+            return StatusCode(201, CreatedAtRoute("GetProductById", new { id = productToCreate.Id }, productToCreate));
+
+        }
+        [HttpDelete("{id:int}")]
+        public ActionResult<ProductDto> DeleteProduct(int id)
+        {
+            var current = _dataContext.Products.FirstOrDefault(x => x.Id == id);
+            if (current == null)
+            {
+                return NotFound();
+            }
+
+            _dataContext.Products.Remove(current);
+            _dataContext.SaveChanges();
+
+            return Ok(current);
+        }
+
+
+
+        /*
         private static int currentId = 1;
         private static List<ProductDto> products = new List<ProductDto>
 {
@@ -33,8 +98,9 @@ namespace FA22.P03.Web.Features.Controllers
         Description = "Good condition with all 5 CDs, booklets, and material from original",
 
     }
-};
-
+   */
+    };
+/*
         [HttpGet]
         public ActionResult<ProductDto[]>  GetAllProducts()
         {
@@ -107,6 +173,6 @@ namespace FA22.P03.Web.Features.Controllers
         }
 
 
-
+*/
     }
-}
+
