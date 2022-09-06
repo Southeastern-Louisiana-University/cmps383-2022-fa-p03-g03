@@ -7,6 +7,20 @@ namespace FA22.P03.Web.Features.Controllers
     [ApiController]
     public class ListingsController : ControllerBase
     {
-        
+        private readonly DataContext _dataContext;
+
+        public ListingsController(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
+
+        [HttpGet("api/listings")]
+        public ActionResult GetListings()
+        {
+
+        }
+
+
     }
 }
