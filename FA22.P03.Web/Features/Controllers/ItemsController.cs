@@ -1,4 +1,6 @@
-﻿using FA22.P03.Web.Features.Items;
+﻿using FA22.P03.Web.Features.Entities.Items;
+using FA22.P03.Web.Features.Items;
+using FA22.P03.Web.Features.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,28 +25,9 @@ namespace FA22.P03.Web.Features.Controllers
 
             return Ok(items);
         }
-        /*
-        [HttpPost]
-        public ActionResult CreateItems(ItemDtos items)
-        {
-            var itemToCreate = new ItemDtos()
-            {
-                Id = items.Id,
-                ProductId = items.ProductId,
-                ProductName = items.ProductName,
-                Condition = items.Condition,
-            };
-            if (string.IsNullOrWhiteSpace(itemToCreate.ProductName) ||
-           itemToCreate.ProductName.Length > 120 ||
-           itemToCreate.ProductId == null)
-            {
-                return BadRequest();
-            }
-            _dataContext.Items.Add(itemToCreate);
-            return Ok(itemToCreate);
-            _dataContext.SaveChanges();
 
-        }
-        */
+
+        
+        
     }
 }

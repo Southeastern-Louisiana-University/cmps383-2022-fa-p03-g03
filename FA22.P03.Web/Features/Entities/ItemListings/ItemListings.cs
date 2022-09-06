@@ -5,8 +5,9 @@ namespace FA22.P03.Web.Features.Listings
 {
     public class ItemListings
     {
-        ProductDto Product { get; set; }
-        ListingDto Listing { get; set; }
+       public int Id { get; set; }  
+      public  ProductDto Product { get; set; }
+      public ListingDto Listing { get; set; }
 
 
     }

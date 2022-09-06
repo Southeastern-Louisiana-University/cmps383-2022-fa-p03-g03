@@ -1,10 +1,14 @@
-﻿/*
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using FA22.P03.Web.Features.Entities.Entities.Products;
 using FA22.P03.Web.Features.Products;
+using System.Net;
+using System.Reflection.Emit;
+using FA22.P03.Web.Features.Items;
+using FA22.P03.Web.Features.Entities.Items;
 
 namespace FA22.P03.Web
 {
@@ -16,34 +20,32 @@ namespace FA22.P03.Web
                 serviceProvider.GetRequiredService<
                     DbContextOptions<DataContext>>()))
             {
-                if (context.Products.Any())
+                if (!context.Products.Any())
                 {
-                    return;
-                }
-                context.Products.AddRange(
+                    context.Products.AddRange(new List<Product>()
+                      {
+                        new Product
+                        {
+                            Name = "Netindo Switch",
+                            Description = "Nice game this is",
+                        },
                     new Product
-                    {
-                        Name = "Netindo Switch",
-                        Description = "Nice game this is",
-                    },
-                    new Product
-                    {
+                        {
                         Name = "Big gun99",
                         Description = "big and strong",
-                    },
-                    new Product
-                    {
+                        },
+                      new Product
+                     {
                         Name = "Haymaker 45",
                         Description = "pretty hairy",
-                    }
+                     },
 
+                   }) ;
+                    context.SaveChanges();
 
-                    );
-                context.SaveChanges();
-
-
-
-        } }
+                }
+                
+            }
+        } 
     }
 }
-*/

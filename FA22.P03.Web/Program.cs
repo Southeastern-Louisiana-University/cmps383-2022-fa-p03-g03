@@ -19,6 +19,16 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    var context = scope.ServiceProvider.GetRequiredService<IServiceProvider>();
+
+    db.Database.Migrate();
+    SeedData.Initialize(context);
+
+}
+
 
 app.MapControllers();
 // Configure the HTTP request pipeline.
@@ -36,7 +46,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 /*
 app.MapGet("/api/products", () =>
     {

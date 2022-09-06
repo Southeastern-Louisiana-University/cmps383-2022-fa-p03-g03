@@ -10,5 +10,7 @@ namespace FA22.P03.Web.Features.Items
        public string? Condition { get; set; }
 
         public int ProductId { get; set; }
+
+    
     }
 }

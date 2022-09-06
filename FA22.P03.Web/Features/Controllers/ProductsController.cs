@@ -1,10 +1,11 @@
 ﻿using FA22.P03.Web.Features.Entities.Entities.Products;
+using FA22.P03.Web.Features.Entities.Items;
 using FA22.P03.Web.Features.Entities.Listings;
 using FA22.P03.Web.Features.Products;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Linq;
 namespace FA22.P03.Web.Features.Controllers
 {
     [Route("api/products")]
@@ -35,6 +36,13 @@ namespace FA22.P03.Web.Features.Controllers
 
             return Ok(result);
         }
+        [HttpGet("{id:int}/listings")]
+        public ActionResult<ProductDto> GetProductListing(int id)
+        {
+
+            return Ok();
+        }
+
         [HttpPost("/api/products")]
         public ActionResult<ProductDto> CreateProduct(ProductDto product)
         {
@@ -42,7 +50,6 @@ namespace FA22.P03.Web.Features.Controllers
             {
                 Name = product.Name,
                 Description = product.Description,
-   
 
             };
 

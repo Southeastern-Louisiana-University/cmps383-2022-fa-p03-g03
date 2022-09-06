@@ -7,6 +7,6 @@ namespace FA22.P03.Web.Features.Controllers
     [ApiController]
     public class ListingsController : ControllerBase
     {
-
+        
     }
 }
