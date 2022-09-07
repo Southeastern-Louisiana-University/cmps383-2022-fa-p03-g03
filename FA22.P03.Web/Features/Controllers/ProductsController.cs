@@ -5,7 +5,11 @@ using FA22.P03.Web.Features.Products;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Linq;
+using System.Net.Http.Headers;
+
 namespace FA22.P03.Web.Features.Controllers
 {
     [Route("api/products")]
@@ -19,9 +23,15 @@ namespace FA22.P03.Web.Features.Controllers
             _dataContext = dataContext;
         }
         [HttpGet]
-        public ActionResult<ProductDto> GetAllProducts()
+        public async Task< ActionResult<IQueryable<ProductDto>>> GetAllProducts()
         {
-            var products = _dataContext.Products;            
+            var products = await _dataContext.Products.Select(t =>
+             new ProductDto()
+             {    Id = t.Id,
+                 Name = t.Name,
+                 Description = t.Description,
+
+             }).ToListAsync();           
 
             return Ok(products);
         }
@@ -40,25 +50,29 @@ namespace FA22.P03.Web.Features.Controllers
         
 
         [HttpPost("/api/products")]
-        public ActionResult<ProductDto> CreateProduct(ProductDto product)
+        public async Task< ActionResult<ProductDto>> CreateProduct(ProductDto product)
         {
-            var productToCreate = new Product()
+            
+            await _dataContext.SaveChangesAsync();
+            if (string.IsNullOrWhiteSpace(product.Name) ||
+           product.Name.Length > 120 ||
+           string.IsNullOrWhiteSpace(product.Description))
             {
+                return BadRequest();
+            }
+            
+            var productToCreate = new Product
+            {
+                 Id =  product.Id,
                 Name = product.Name,
                 Description = product.Description,
 
             };
-            
-            if (string.IsNullOrWhiteSpace(productToCreate.Name) ||
-           productToCreate.Name.Length > 120 ||
-           string.IsNullOrWhiteSpace(productToCreate.Description))
-            {
-                return BadRequest();
-            }
-            _dataContext.Products.Add(productToCreate);
-            _dataContext.SaveChanges();
-            return StatusCode(201, CreatedAtRoute("GetProductById", new { id = productToCreate.Id }, productToCreate));
+            _dataContext.Add(productToCreate);
 
+             _dataContext.SaveChanges();
+
+            return StatusCode(201, CreatedAtRoute("GetProductById",  productToCreate));
         }
 
         [HttpPut("{id:int}")]

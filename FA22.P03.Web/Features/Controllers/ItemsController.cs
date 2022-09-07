@@ -43,7 +43,7 @@ namespace FA22.P03.Web.Features.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(result);
         }
        
       
