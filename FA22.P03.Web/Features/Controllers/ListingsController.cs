@@ -60,12 +60,6 @@ namespace FA22.P03.Web.Features.Controllers
     [HttpPost("api/listings")]
         public async Task <ActionResult<ListingDto>> CreateListing(ListingDto listing)
         {
-            if(listing.StartUtc > listing.EndUtc)
-            {
-                return BadRequest();
-            }
-            await _dataContext.SaveChangesAsync();
-
             _dataContext.Entry(listing).Property(x => x.Name);
             var dto = new ListingDto()
             {
@@ -73,13 +67,12 @@ namespace FA22.P03.Web.Features.Controllers
                 Name = listing.Name,
                 Description = listing.Description,
                 Price = listing.Price,
-                StartUtc = listing.StartUtc,
-                EndUtc = listing.EndUtc,
+                StartUtc = DateTimeOffset.UtcNow.AddDays(-1),
+                EndUtc = DateTimeOffset.UtcNow.AddDays(1),
             };
 
+            await _dataContext.SaveChangesAsync();
             return CreatedAtAction(nameof(GetListingsById), dto);
         }
-        
-
     }
 }
