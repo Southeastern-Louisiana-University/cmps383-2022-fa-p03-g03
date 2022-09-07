@@ -16,20 +16,21 @@ namespace FA22.P03.Web
 
         }
        public DbSet<Product> Products { get; set; }
-        public DbSet<Listings> Listings { get; set; }
+        public DbSet<Listing> Listings { get; set; }
         public DbSet<Item> Items { get; set; }
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                .Property(p => p.Name);
-            //.IsRequired()
-            //.HasMaxLength(120);
+                .Property(p => p.Name)
+            .IsRequired()
+            .HasMaxLength(120);
 
             modelBuilder.Entity<Item>();
 
-            modelBuilder.Entity<Listings>();
+            modelBuilder.Entity<Listing>();
 
             modelBuilder.Entity<ItemListings>();
+                
             
             
 

@@ -10,7 +10,7 @@ namespace FA22.P03.Web.Features.Entities.Items
         public int Id { get; set; }
         public int ProductId { get; set; }
        public Product Product { get; set; }
-        
+       public string ProductName { get; set; }
        public string Condition { get; set; }
 
        public ICollection<ItemListings> itemListings { get; set; }

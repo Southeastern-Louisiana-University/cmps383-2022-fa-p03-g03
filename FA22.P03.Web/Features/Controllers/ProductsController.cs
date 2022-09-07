@@ -19,9 +19,9 @@ namespace FA22.P03.Web.Features.Controllers
             _dataContext = dataContext;
         }
         [HttpGet]
-        public ActionResult GetAllProducts()
+        public ActionResult<ProductDto> GetAllProducts()
         {
-            var products = _dataContext.Products;
+            var products = _dataContext.Products;            
 
             return Ok(products);
         }
@@ -36,12 +36,8 @@ namespace FA22.P03.Web.Features.Controllers
 
             return Ok(result);
         }
-        [HttpGet("{id:int}/listings")]
-        public ActionResult<ProductDto> GetProductListing(int id)
-        {
-
-            return Ok();
-        }
+       
+        
 
         [HttpPost("/api/products")]
         public ActionResult<ProductDto> CreateProduct(ProductDto product)
@@ -52,7 +48,7 @@ namespace FA22.P03.Web.Features.Controllers
                 Description = product.Description,
 
             };
-
+            
             if (string.IsNullOrWhiteSpace(productToCreate.Name) ||
            productToCreate.Name.Length > 120 ||
            string.IsNullOrWhiteSpace(productToCreate.Description))
@@ -62,6 +58,30 @@ namespace FA22.P03.Web.Features.Controllers
             _dataContext.Products.Add(productToCreate);
             _dataContext.SaveChanges();
             return StatusCode(201, CreatedAtRoute("GetProductById", new { id = productToCreate.Id }, productToCreate));
+
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<ProductDto> UpdateProduct(int id, ProductDto productDto)
+        {
+            if (string.IsNullOrWhiteSpace(productDto.Name) ||
+          productDto.Name.Length > 120 ||
+          string.IsNullOrWhiteSpace(productDto.Description))
+            {
+                return BadRequest();
+            }
+
+            var current = _dataContext.Products.FirstOrDefault(x => x.Id == id);
+            if (current == null)
+            {
+                return NotFound();
+            }
+
+            current.Name = productDto.Name;
+            current.Description = productDto.Description;
+
+            _dataContext.SaveChanges();
+            return Ok(current);
 
         }
         [HttpDelete("{id:int}")]

@@ -1,6 +1,6 @@
 ﻿namespace FA22.P03.Web.Features.Listings
 {
-    public class Listings
+    public class Listing
     {
         public int Id { get; set; }
 
